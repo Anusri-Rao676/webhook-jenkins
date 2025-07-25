@@ -1,11 +1,16 @@
 pipeline {
     agent any
-
-    tools {
-        python 'Python 3.9'  // This matches the name you set above
-    }
-
     stages {
+        stage('version'){
+            steps{
+                sh 'python3 --version'
+            }
+        }
+        stage('hello'){
+            steps{
+                sh 'python3 app.py'
+            }
+        }
         stage('Checkout') {
             steps {
                 echo '📦 Checking out repository...'
