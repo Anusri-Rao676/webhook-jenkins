@@ -1,25 +1,29 @@
 pipeline {
-    agent {
-         docker {
-            image 'python:3.12'
-        }
-    }
- 
+    agent any
 
     stages {
         stage('Checkout') {
             steps {
                 echo 'Checking out repository...'
-                checkout([$class: 'GitSCM', branches: [[name: '*/main']],
+                checkout([$class: 'GitSCM',
+                          branches: [[name: '*/main']],
                           userRemoteConfigs: [[url: 'https://github.com/Anusri-Rao676/webhook-jenkins.git']]])
+            }
+        }
+
+        stage('Run Python Script') {
+            steps {
+                echo 'Running local Python script...'
+                sh 'python3 --version'
+                sh 'python3 app.py'
             }
         }
 
         stage('Install Dependencies') {
             steps {
                 echo 'Installing Python dependencies...'
-                sh 'python -m pip install --upgrade pip'
-                sh 'pip install -r requirements.txt'
+                sh 'python3 -m pip install --upgrade pip'
+                sh 'pip3 install -r requirements.txt'
             }
         }
 
@@ -36,10 +40,10 @@ pipeline {
             echo 'Pipeline finished.'
         }
         success {
-            echo 'Pytest tests passed successfully!'
+            echo '✅ Pytest tests passed successfully!'
         }
         failure {
-            echo 'Pytest tests failed. Check console output for details.'
+            echo '❌ Pytest tests failed. Check console output for details.'
         }
     }
 }
