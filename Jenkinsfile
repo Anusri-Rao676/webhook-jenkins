@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment {
+    PATH = "C:\Users\Admin\AppData\Local\Microsoft\WindowsApps\PythonSoftwareFoundation.Python.3.12_qbz5n2kfra8p0\python.exe"
+    }
     stages {
         stage('Checkout') {
             steps {
