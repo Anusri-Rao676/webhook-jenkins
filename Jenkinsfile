@@ -1,19 +1,11 @@
 pipeline {
     agent any
 
-    environment {
-        PATH = "/usr/bin:${env.PATH}"
+    tools {
+        python 'Python 3.9'  // This matches the name you set above
     }
 
     stages {
-        stage('Custom PATH') {
-            steps {
-                echo '🔍 PATH configuration check...'
-                sh 'echo $PATH'
-                sh 'which python3'
-            }
-        }
-
         stage('Checkout') {
             steps {
                 echo '📦 Checking out repository...'
@@ -23,25 +15,33 @@ pipeline {
             }
         }
 
-        stage('Run Python Script') {
+        stage('Setup') {
             steps {
-                echo '🐍 Running local Python script...'
+                echo '🐍 Confirming Python setup...'
                 sh 'python3 --version'
-                sh 'python3 app.py'
+                sh 'echo $PATH'
+                sh 'which python3'
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                echo '📦 Installing Python dependencies...'
+                echo '📦 Installing dependencies...'
                 sh 'python3 -m pip install --upgrade pip'
                 sh 'pip3 install -r requirements.txt'
             }
         }
 
-        stage('Run Pytest') {
+        stage('Run App') {
             steps {
-                echo '🧪 Running Pytest tests...'
+                echo '🚀 Running Python app...'
+                sh 'python3 app.py'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                echo '🧪 Executing tests...'
                 sh 'pytest --verbose'
             }
         }
@@ -49,13 +49,13 @@ pipeline {
 
     post {
         always {
-            echo '✅ Pipeline finished.'
+            echo '✅ Pipeline complete.'
         }
         success {
-            echo '🎉 Pytest tests passed successfully!'
+            echo '🎉 Tests passed successfully!'
         }
         failure {
-            echo '❌ Pytest tests failed. Check console output for details.'
+            echo '❌ Tests failed. Check logs for details.'
         }
     }
 }
