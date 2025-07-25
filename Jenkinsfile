@@ -1,16 +1,23 @@
 pipeline {
     agent any
+
+    environment {
+        VENV_DIR = 'venv'
+    }
+
     stages {
-        stage('version'){
-            steps{
+        stage('Version') {
+            steps {
                 sh 'python3 --version'
             }
         }
-        stage('hello'){
-            steps{
+
+        stage('Hello') {
+            steps {
                 sh 'python3 app.py'
             }
         }
+
         stage('Checkout') {
             steps {
                 echo '📦 Checking out repository...'
@@ -31,23 +38,33 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                echo '📦 Installing dependencies...'
-                sh 'python3 -m pip install --upgrade pip'
-                sh 'pip3 install -r requirements.txt'
+                echo '📦 Creating virtual environment and installing dependencies...'
+                sh '''
+                    python3 -m venv ${VENV_DIR}
+                    . ${VENV_DIR}/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
+                '''
             }
         }
 
         stage('Run App') {
             steps {
                 echo '🚀 Running Python app...'
-                sh 'python3 app.py'
+                sh '''
+                    . ${VENV_DIR}/bin/activate
+                    python app.py
+                '''
             }
         }
 
         stage('Run Tests') {
             steps {
                 echo '🧪 Executing tests...'
-                sh 'pytest --verbose'
+                sh '''
+                    . ${VENV_DIR}/bin/activate
+                    pytest --verbose
+                '''
             }
         }
     }
