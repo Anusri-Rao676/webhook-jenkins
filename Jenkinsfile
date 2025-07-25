@@ -5,7 +5,7 @@ pipeline {
             steps {
                 echo 'Checking out repository...'
                 checkout([$class: 'GitSCM', branches: [[name: '*/main']],
-                          userRemoteConfigs: [[url: 'https://your-repo-url.git']]])
+                          userRemoteConfigs: [[url: 'https://github.com/Anusri-Rao676/webhook-jenkins.git']]])
             }
         }
 
