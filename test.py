@@ -26,7 +26,7 @@ def test_divide_with_fixture(sample_numbers):
 def test_divide_parametrized(num1, num2, expected):
     assert divide(num1, num2) == expected
 
-# Test for expected exceptions
+# Test for expected exceptions and conditions
 def test_divide_by_zero_raises_error():
     with pytest.raises(ValueError, match="Cannot divide by zero!"):
         divide(10, 0)
