@@ -1,8 +1,10 @@
 pipeline {
-    agent any
-   environment {
-    PATH = "C:/Users/Admin/AppData/Local/Programs/Python/Python312;$PATH"
-}
+    agent {
+         docker {
+            image 'python:3.12'
+        }
+    }
+ 
 
     stages {
         stage('Checkout') {
